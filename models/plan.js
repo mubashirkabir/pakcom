@@ -1,16 +1,20 @@
 var mongoose = require('mongoose');
 
 var planSchema = new mongoose.Schema({
-    planId: {
-        type: String
-    },
     planName: {
         type: String
     },
     planDuration: {
+        //in months
+        type: Number
+    },
+    planPricePKR: {
         type: String
     },
-    planPrice: {
+    planPriceUSD: {
+        type: String
+    },
+    planDescription: {
         type: String
     }
 });
