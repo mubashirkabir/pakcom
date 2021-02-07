@@ -25,7 +25,6 @@ var userController = {
             }
         });
     },
-
     updateUser: (req, res) => {
         userModel.findByIdAndUpdate(req.params.id, req.body, { new: true }, (err, todo) => {
             if (err) {
@@ -42,8 +41,12 @@ var userController = {
             }
         });
     },
-    approveUser:  (req, res) => {
-        userModel.findByIdAndUpdate(req.params.id, {$set: { 'status': 'active'} }, { new: true }, (err, todo) => {
+    approveUser: (req, res) => {
+        var user = req.body;
+        user.startDate = new Date().setHours(0, 0, 0, 0);
+        user.endDate = new Date().setHours(23, 59, 59, 0);
+        user.endDate.setMonth(user.endDate.getMonth() + user.subscribedPlan.planDuration);
+        userModel.findByIdAndUpdate(req.params.id, user, { new: true }, (err, todo) => {
             if (err) {
                 res.status(500);
                 res.end("Failed to Update");
@@ -84,6 +87,30 @@ var userController = {
     },
     allUsers: (req, res) => {
         userModel.find({}).exec(function (error, results) {
+            if (error) {
+                return next(error);
+            }
+            res.json(results);
+        });
+    },
+    pendingAccount: (req, res) => {
+        userModel.find({"status" : "pending"}).exec(function (error, results) {
+            if (error) {
+                return next(error);
+            }
+            res.json(results);
+        });
+    },
+    expiredAccount: (req, res) => {
+        userModel.find({"status" : "expired"}).exec(function (error, results) {
+            if (error) {
+                return next(error);
+            }
+            res.json(results);
+        });
+    },
+    activeAccount: (req, res) => {
+        userModel.find({"status" : "active"}).exec(function (error, results) {
             if (error) {
                 return next(error);
             }
