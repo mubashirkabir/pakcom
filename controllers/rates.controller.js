@@ -20,7 +20,6 @@ var ratesController = {
                     }
                 });
             });
-
     },
     updateRates: (req, res) => {
         req.body.date = Date.now();
@@ -82,6 +81,14 @@ var ratesController = {
             res.json(results);
         });
     },
+    allCategoryRates: (req, res) => {
+        ratesModel.find({ "category._id.oid": req.params.category }).exec(function (error, results) {
+            if (error) {
+                return next(error);
+            }
+            res.json(results);
+        });
+    },
     updateSequence: (req, res) => {
         var mainId = req.params.id;
         var secondId = req.params.otherid;
@@ -96,6 +103,27 @@ var ratesController = {
                             });
                     });
             });
+    },
+    getOldRates: (req, res) => {
+        var location = req.body.locationId;
+        var product = req.body.productId;
+        var startDate = new Date(req.body.startDate);
+        startDate.setHours(0, 0, 0, 0);
+        var endDate = new Date(req.body.endDate);
+        endDate.setHours(23, 59, 59, 0);
+        console.log(location + " " + product + " " + startDate + " " + endDate)
+        ratesModel.find({
+            "location._id.oid": location, "product._id.oid": product,
+            date: {
+                $gte: startDate,
+                $lt: endDate
+            }
+        }).select({ 'rate': 1, 'date': 1 }).exec(function (error, results) {
+            if (error) {
+                return next(error);
+            }
+            res.json(results);
+        });
     }
 }
 function copyObject(newRate) {
@@ -118,7 +146,6 @@ function countDocument(category) {
                 if (err) {
                     reject(err);
                 }
-                console.log(c + 1);
                 resolve(c + 1);
             });
         });
