@@ -9,6 +9,7 @@ router.get('/pendingaccounts', productController.pendingAccount);
 router.get('/expiredaccounts', productController.expiredAccount);
 router.get('/activeaccounts', productController.activeAccount);
 router.put('/approveuser/:id', productController.approveUser);
+router.put('/disableuser/:id', productController.disableUser);
 router.put('/updateuser/:id', productController.updateUser);
 router.delete('/deleteuser/:id', productController.deleteUser);
 
