@@ -17,6 +17,9 @@ var userSchema = new mongoose.Schema({
         required: true
     },
     subscribedPlan: {
+        type: Object
+    },
+    transactionId: {
         type: String
     },
     startDate: {
