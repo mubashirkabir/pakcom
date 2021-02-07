@@ -41,6 +41,22 @@ var userController = {
             }
         });
     },
+    disableUser: (req, res) => {
+        userModel.findByIdAndUpdate(req.params.id,{$set : {status: "disabled"}}, { new: true }, (err, todo) => {
+            if (err) {
+                res.status(500);
+                res.end("Failed to Update");
+            }
+            if (!todo) {
+                res.status(404)
+                res.end("user does not exist")
+            }
+            else {
+                res.status(200);
+                res.json(todo);
+            }
+        });
+    },
     approveUser: (req, res) => {
         var user = req.body;
         user.startDate = new Date().setHours(0, 0, 0, 0);
