@@ -1,4 +1,4 @@
-var blogController = require('../controllers/blog.controllers')
+var blogController = require('../controllers/blog.controller')
 var express = require('express');
 var router = express.Router();
 
