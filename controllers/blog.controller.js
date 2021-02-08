@@ -4,8 +4,9 @@ var notificationModel = require("../models/notification");
 var blogController = {
     addBlog: (req, res) => {
         var blog = new blogModel(req.body);
+        var notification = new notificationModel();
         notification.notificationFor = "users";
-        notification.notificationType = "blogs";
+        notification.notificationType = "blog Added";
         blog.save(function (err, blog) {
             if (err) {
                 res.status(500)
@@ -21,19 +22,26 @@ var blogController = {
         });
     },
     updateBlog: (req, res) => {
+        var notification = new notificationModel();
+        notification.notificationFor = "users";
+        notification.notificationType = "blog Added";
         blogModel.findByIdAndUpdate(req.params.id, req.body, { new: true }, (err, todo) => {
             if (err) {
                 res.status(500);
                 res.end("Failed to Update");
             }
             if (!todo) {
+                notification.notificationLinkId = todo._id;
                 res.status(404)
                 res.end("blog does not exist")
             }
             else {
-                res.status(200);
-                res.json(todo);
-            }
+                notification.notificationLinkId = blog._id;
+                notification.save(function (err, notification) {
+                    res.status(200);
+                    res.json(todo);
+                });
+            } 
         });
     },
     makePublic: (req, res) => {
