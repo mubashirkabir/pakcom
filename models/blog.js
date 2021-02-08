@@ -6,19 +6,20 @@ var blogSchema = new mongoose.Schema({
         required: true,
     },
     category: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'category'
+        type: Object
     },
     content: {
         type: String,
         required: true,
     },
     img: {
-        data: Buffer,
-        contentType: String
+        type: String
     },
     date: {
-        type: String
+        type: Date
+    },
+    isPublic: {
+        type: Boolean
     }
 });
 
