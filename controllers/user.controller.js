@@ -25,6 +25,44 @@ var userController = {
             }
         });
     },
+    signin: (req, res) => {
+        let username = req.body.username;
+        let password = req.body.password;
+        userModel.find({
+            $and: [
+                { $or: [{ "name": username }, { "phoneNumber": username }] },
+                { "password": calculatesHash(password) }
+            ]
+        }).exec(function (error, results) {
+            if (error) {
+                res.send(error);
+            }
+            if (results.length > 0) {
+                res.status(200);
+                res.json(results);
+            }
+            else {
+                res.status(404);
+                res.json("No user found");
+            }
+        });;
+    },
+    forgotPassword: (req, res) => {
+        userModel.findByIdAndUpdate(req.params.id, { $set: { "password": calculatesHash(req.params.password) } }, { new: true }, (err, todo) => {
+            if (err) {
+                res.status(500);
+                res.end("Failed to Update");
+            }
+            if (!todo) {
+                res.status(404)
+                res.end("user does not exist")
+            }
+            else {
+                res.status(200);
+                res.json(todo);
+            }
+        });
+    },
     updateUser: (req, res) => {
         userModel.findByIdAndUpdate(req.params.id, req.body, { new: true }, (err, todo) => {
             if (err) {
@@ -42,7 +80,7 @@ var userController = {
         });
     },
     disableUser: (req, res) => {
-        userModel.findByIdAndUpdate(req.params.id,{$set : {status: "disabled"}}, { new: true }, (err, todo) => {
+        userModel.findByIdAndUpdate(req.params.id, { $set: { status: "disabled" } }, { new: true }, (err, todo) => {
             if (err) {
                 res.status(500);
                 res.end("Failed to Update");
@@ -110,7 +148,7 @@ var userController = {
         });
     },
     pendingAccount: (req, res) => {
-        userModel.find({"status" : "pending"}).exec(function (error, results) {
+        userModel.find({ "status": "pending" }).exec(function (error, results) {
             if (error) {
                 return next(error);
             }
@@ -118,7 +156,7 @@ var userController = {
         });
     },
     expiredAccount: (req, res) => {
-        userModel.find({"status" : "expired"}).exec(function (error, results) {
+        userModel.find({ "status": "expired" }).exec(function (error, results) {
             if (error) {
                 return next(error);
             }
@@ -126,7 +164,7 @@ var userController = {
         });
     },
     activeAccount: (req, res) => {
-        userModel.find({"status" : "active"}).exec(function (error, results) {
+        userModel.find({ "status": "active" }).exec(function (error, results) {
             if (error) {
                 return next(error);
             }
