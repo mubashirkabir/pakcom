@@ -12,6 +12,8 @@ var locationRouter = require('./routes/location.routes');
 var ratesRouter = require('./routes/rates.routes');
 var planRouter = require('./routes/plan.routes');
 var userRouter = require('./routes/users.routes');
+var blogsRouter = require('./routes/blogs.routes');
+var notificationRouter = require('./routes/notification.routes';)
 
 
 var app = express();
@@ -32,6 +34,8 @@ app.use('/location', locationRouter);
 app.use('/rates', ratesRouter);
 app.use('/plan', planRouter);
 app.use('/user', userRouter);
+app.use('/blogs', blogsRouter);
+app.use('/notification', notificationRouter);
 
 
 // catch 404 and forward to error handler
