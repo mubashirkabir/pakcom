@@ -17,8 +17,24 @@ var notificationController = {
             res.json(results);
         });
     },
+    userNotifications: (req, res) => {
+        notificationModel.find({"notificationFor" : "user"}).exec(function (error, results) {
+            if (error) {
+                return next(error);
+            }
+            res.json(results);
+        });
+    },
     approvalNotifications: (req, res) => {
         notificationModel.find({"notificationType" : "userApproval"}).exec(function (error, results) {
+            if (error) {
+                return next(error);
+            }
+            res.json(results);
+        });
+    },
+    screenshotNotifications: (req, res) => {
+        notificationModel.find({"notificationType" : "userScreenshot"}).exec(function (error, results) {
             if (error) {
                 return next(error);
             }
