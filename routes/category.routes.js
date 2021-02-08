@@ -1,4 +1,4 @@
-var categoryController = require('../controllers/category.controllers')
+var categoryController = require('../controllers/category.controller')
 var express = require('express');
 var router = express.Router();
 
