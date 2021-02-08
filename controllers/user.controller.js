@@ -39,9 +39,10 @@ var userController = {
             }
             var currentDate = new Date();
             var endDate = new Date(results.endDate);
-            endDate.addDays(1);
-            endDate.setHours(23,59,59,0);
-            currentDate.setHours(23,59,59,0);
+            endDate.setHours(23, 59, 59, 0);
+            currentDate.setHours(23, 59, 59, 0);
+            console.log(endDate);
+            console.log(currentDate);
             res.status(200);
             if (results.status === "expired") {
                 res.json("Account expired");
@@ -49,7 +50,7 @@ var userController = {
                 res.json("Account disabled");
             } else if (results.status === "pending") {
                 res.json("Account not active");
-            }else if (currentDate >= endDate) {
+            } else if (currentDate >= endDate) {
                 userModel.findByIdAndUpdate(results._id, { $set: { "status": "expired" } }, { new: true }, (err, todo) => {
                     if (err) {
                         res.status(500);
