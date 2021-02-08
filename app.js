@@ -13,7 +13,7 @@ var ratesRouter = require('./routes/rates.routes');
 var planRouter = require('./routes/plan.routes');
 var userRouter = require('./routes/users.routes');
 var blogsRouter = require('./routes/blogs.routes');
-var notificationRouter = require('./routes/notification.routes';)
+var notificationRouter = require('./routes/notification.routes')
 
 
 var app = express();
