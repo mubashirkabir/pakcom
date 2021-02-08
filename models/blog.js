@@ -8,7 +8,11 @@ var blogSchema = new mongoose.Schema({
     category: {
         type: Object
     },
-    content: {
+    contentEng: {
+        type: String,
+        required: true,
+    }, 
+    contentUrdu: {
         type: String,
         required: true,
     },
