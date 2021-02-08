@@ -77,8 +77,8 @@ var blogController = {
                 res.json(todo);
             }
         });
-    },
-    allBlogs: (req, res) => {
+    }, 
+    allBlog: (req, res) => {
         blogModel.find({}).exec(function (error, results) {
             if (error) {
                 return next(error);
@@ -86,8 +86,41 @@ var blogController = {
             res.json(results);
         });
     },
-    blogCategory: (req, res) => {
-        blogModel.find({}).exec(function (error, results) {
+   
+    allBlogsEng: (req, res) => {
+        blogModel.find({}).select({ 'name': 1, 'category': 1 , 'contentEng': 1 , 'img':1, 'date': 1, 'isPublic': 1}).exec(function (error, results) {
+            if (error) {
+                return next(error);
+            }
+            res.json(results);
+        });
+    },
+    allBlogsUrdu: (req, res) => {
+        blogModel.find({}).select({ 'name': 1, 'category': 1 , 'contentUrdu': 1 , 'img':1, 'date': 1, 'isPublic': 1}).exec(function (error, results) {
+            if (error) {
+                return next(error);
+            }
+            res.json(results);
+        });
+    },
+    allBlogCategory: (req, res) => {
+        blogModel.find({"category._id.oid" : req.params.id }).exec(function (error, results) {
+            if (error) {
+                return next(error);
+            }
+            res.json(results);
+        });
+    },
+    blogCategoryEng: (req, res) => {
+        blogModel.find({"category._id.oid" : req.params.id }).select({ 'name': 1, 'category': 1 , 'contentEng': 1 , 'img':1, 'date': 1, 'isPublic': 1}).exec(function (error, results) {
+            if (error) {
+                return next(error);
+            }
+            res.json(results);
+        });
+    },
+    blogCategoryUrdu: (req, res) => {
+        blogModel.find({"category._id.oid" : req.params.id }).select({ 'name': 1, 'category': 1 , 'contentUrdu': 1 , 'img':1, 'date': 1, 'isPublic': 1}).exec(function (error, results) {
             if (error) {
                 return next(error);
             }
