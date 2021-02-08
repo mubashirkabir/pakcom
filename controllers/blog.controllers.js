@@ -1,16 +1,22 @@
-var blogModel = require("../models/blog")
-
+var blogModel = require("../models/blog");
+var notificationModel = require("../models/notification");
+  
 var blogController = {
     addBlog: (req, res) => {
         var blog = new blogModel(req.body);
-        blog.save((err) => {
+        notification.notificationFor = "users";
+        notification.notificationType = "blogs";
+        blog.save(function (err, blog) {
             if (err) {
                 res.status(500)
                 res.send("Failed to add" + err); rs
             }
             else {
-                res.status(200);
-                res.end("Successfully added");
+                notification.notificationLinkId = blog._id;
+                notification.save(function (err, notification) {
+                    res.status(200);
+                    res.end("Successfully added");
+                });
             }
         });
     },
