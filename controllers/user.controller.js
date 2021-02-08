@@ -28,7 +28,7 @@ var userController = {
     signin: (req, res) => {
         let username = req.body.username;
         let password = req.body.password;
-        userModel.find({
+        userModel.findOne({
             $and: [
                 { $or: [{ "name": username }, { "phoneNumber": username }] },
                 { "password": calculatesHash(password) }
@@ -37,13 +37,35 @@ var userController = {
             if (error) {
                 res.send(error);
             }
-            if (results.length > 0) {
-                res.status(200);
+            var currentDate = new Date();
+            var endDate = new Date(results.endDate);
+            endDate.addDays(1);
+            endDate.setHours(23,59,59,0);
+            currentDate.setHours(23,59,59,0);
+            res.status(200);
+            if (results.status === "expired") {
+                res.json("Account expired");
+            } else if (results.status === "disabled") {
+                res.json("Account disabled");
+            } else if (results.status === "pending") {
+                res.json("Account not active");
+            }else if (currentDate >= endDate) {
+                userModel.findByIdAndUpdate(results._id, { $set: { "status": "expired" } }, { new: true }, (err, todo) => {
+                    if (err) {
+                        res.status(500);
+                        res.end("Failed to Update");
+                    }
+                    if (!todo) {
+                        res.status(404)
+                        res.end("user does not exist")
+                    }
+                    else {
+                        res.status(200);
+                        res.json("Account expired");
+                    }
+                });
+            } else {
                 res.json(results);
-            }
-            else {
-                res.status(404);
-                res.json("No user found");
             }
         });;
     },
@@ -86,8 +108,8 @@ var userController = {
                 res.end("Failed to Update");
             }
             if (!todo) {
-                res.status(404)
-                res.end("user does not exist")
+                res.status(404);
+                res.end("user does not exist");
             }
             else {
                 res.status(200);
