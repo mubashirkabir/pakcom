@@ -41,8 +41,30 @@ var notificationController = {
             res.json(results);
         });
     },
+    addScreenshotNotification: (req, res) => {
+        var notification = new notificationModel(req.body);
+        notification.notificationType = "userScreenshot";
+        notification.save((err) => {
+            if (err) {
+                res.status(500)
+                res.send("Failed to add" + err); rs
+            }
+            else {
+                res.status(200);
+                res.end("Successfully added");
+            }
+        });       
+    },
     blogsNotifications: (req, res) => {
         notificationModel.find({ $or: [{ "notificationType": "blog Added" }, { "notificationType": "blog Updated" }] }).exec(function (error, results) {
+            if (error) {
+                return next(error);
+            }
+            res.json(results);
+        });
+    },
+    ratesNotifications: (req, res) => {
+        notificationModel.find({ "notificationType": "rate"  }).exec(function (error, results) {
             if (error) {
                 return next(error);
             }
