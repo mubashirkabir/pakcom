@@ -6,6 +6,7 @@ var crypto = require('crypto');
 var userController = {
     signup: (req, res) => {
         var user = new userModel(req.body);
+        user.status = "pending";
         var notification = new notificationModel();
         user.password = calculatesHash(user.password);
         notification.notificationFor = "admin";
