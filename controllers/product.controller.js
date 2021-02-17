@@ -53,6 +53,14 @@ var productController = {
             }
             res.json(results);
         });
+    },
+     allCategoryProducts: (req, res) => {
+        productModel.find({ 'productCategory._id.oid' : req.params.categoryId}).exec(function (error, results) {
+            if (error) {
+                return next(error);
+            }
+            res.json(results);
+        });
     }
 }
 module.exports = productController
